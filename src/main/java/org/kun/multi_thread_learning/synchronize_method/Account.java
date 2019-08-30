@@ -6,6 +6,14 @@ public class Account
     
     private double balance;
     
+    private boolean hasBalance = false;
+    
+    public Account(String accountNo, double balance)
+    {
+        this.accountNo = accountNo;
+        this.balance = balance;
+    }
+    
     public String getAccountNo()
     {
         return accountNo;
@@ -26,43 +34,46 @@ public class Account
         this.balance = balance;
     }
     
-    public Account(String accountNo, double balance)
-    {
-        this.accountNo = accountNo;
-        this.balance = balance;
-    }
-    
     public int hashCode()
     {
         return accountNo.hashCode();
     }
     
     public synchronized void draw(double drawAmount)
+        throws InterruptedException
     {
-        if (balance >= drawAmount)
+        if (!hasBalance)
         {
-            
-            System.out.println(
-                Thread.currentThread().getName() + " draw " + drawAmount + " in " + accountNo + " successfully");
-            
-            try
-            {
-                Thread.sleep(10);
-            }
-            catch (InterruptedException e)
-            {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            balance -= drawAmount;
-            System.out.println("The balance of " + accountNo + " is " + balance);
+            System.out.println(Thread.currentThread().getName() + " this account doesn't have balance");
+            wait();
         }
         else
         {
-            System.out
-                .println(Thread.currentThread().getName() + " draw " + drawAmount + " in " + accountNo + " failed");
-            System.out.println("The balance of " + accountNo + " is " + balance);
+            System.out.println(
+                Thread.currentThread().getName() + " draw " + drawAmount + " in " + accountNo + " successfully");
+            balance -= drawAmount;
+            hasBalance = false;
+            notifyAll();
         }
+        
+    }
+    
+    public synchronized void deposit(double depositAmount)
+        throws InterruptedException
+    {
+        if (hasBalance)
+        {
+            System.out.println(Thread.currentThread().getName() + " this account already have balance");
+            wait();
+        }
+        else
+        {
+            balance += depositAmount;
+            System.out.println(Thread.currentThread().getName() + "deposit " + depositAmount);
+            hasBalance = true;
+            notifyAll();
+        }
+        
     }
     
     public boolean equals(Object obj)

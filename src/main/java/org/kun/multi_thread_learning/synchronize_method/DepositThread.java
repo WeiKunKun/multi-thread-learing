@@ -1,16 +1,16 @@
 package org.kun.multi_thread_learning.synchronize_method;
 
-public class DrawThread implements Runnable
+public class DepositThread implements Runnable
 {
     
     private Account account;
     
-    private double drawAmount;
+    private double depositAmount;
     
-    public DrawThread(Account account, double drawAmount)
+    public DepositThread(Account account, double depositAmount)
     {
         this.account = account;
-        this.drawAmount = drawAmount;
+        this.depositAmount = depositAmount;
     }
     
     @Override
@@ -20,7 +20,7 @@ public class DrawThread implements Runnable
         {
             for (int i = 0; i < 100; i++)
             {
-                account.draw(drawAmount);
+                account.deposit(depositAmount);
             }
         }
         catch (InterruptedException e)

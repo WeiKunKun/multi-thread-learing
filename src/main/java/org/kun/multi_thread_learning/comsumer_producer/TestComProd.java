@@ -5,10 +5,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class TestComProd
-{
-    public static void main(String[] args)
-    {
+public class TestComProd {
+    public static void main(String[] args) {
         BlockingQueue<String> bq = new ArrayBlockingQueue<>(2);
         Comsumer comsumer = new Comsumer(bq);
         Producer producer = new Producer(bq);
